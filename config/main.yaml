@@ -1,0 +1,11 @@
+
+version: 5.5.0.4
+type: common
+authorName: "Ilya I"
+moduleName: 'Google Tag Manager'
+description: 'Analytics, remarketing and conversions tracking'
+minorRequiredCoreVersion: 0
+dependsOn: {  }
+incompatibleWith: {  }
+showSettingsForm: true
+canDisable: true

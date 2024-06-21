@@ -1,0 +1,10 @@
+
+XLite\Model\Config:
+  - name: container_id
+    category: Iidev\GoogleTagManager
+    type: XLite\View\FormField\Input\Text
+    orderby: 100
+    value: ''
+    translations:
+      - code: en
+        option_name: 'Container ID'
