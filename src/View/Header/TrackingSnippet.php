@@ -6,7 +6,7 @@ use XLite\View\AView;
 use XLite\Core\Config;
 use XCart\Extender\Mapping\ListChild;
 use \XLite\Core\Auth;
-use Iidev\GoogleTagManager\FrontendTracking;
+use Iidev\GoogleTagManager\Core\FrontendTracking;
 
 /**
  * @ListChild (list="head", zone="customer")
@@ -35,9 +35,36 @@ class TrackingSnippet extends AView
         return $profile ? $profile->getLogin() : null;
     }
 
+    public function isCartPage()
+    {
+        if ($this->getTarget() == 'cart' && $this->getCart() && $this->getCart()->getItems()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function isCheckoutPage()
     {
         if ($this->getTarget() == 'checkout' && $this->getCart() && $this->getCart()->getItems()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isSubscriptionPage()
+    {
+        if ($this->getTarget() == 'subscription_page') {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isCheckoutSuccessPage()
+    {
+        if ($this->getTarget() == 'checkoutSuccess' && $this->getOrder()) {
             return true;
         }
 
@@ -53,8 +80,28 @@ class TrackingSnippet extends AView
         return false;
     }
 
-    public function getDataLayerData() {
-        return [];
+    protected function getCheckoutSuccessPageData()
+    {
+        $tracking = new FrontendTracking();
+        return $tracking->doPurchase($this->getOrder());
+    }
+
+    protected function getCheckoutPageData()
+    {
+        $tracking = new FrontendTracking();
+        return $tracking->doBeginCheckout();
+    }
+
+    protected function getCartPageData()
+    {
+        $tracking = new FrontendTracking();
+        return $tracking->doViewCart($this->getCart());
+    }
+
+    protected function getProductPageData()
+    {
+        $tracking = new FrontendTracking();
+        return $tracking->doViewProduct($this->getProduct());
     }
 
     /**

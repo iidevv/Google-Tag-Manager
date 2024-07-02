@@ -2,13 +2,7 @@
  # Google tag manager head
  #}
 
-{% if this.getDataLayerData() %}
-<script>
-  dataLayer = [{{ this.getDataLayerData()|json_encode|raw }}];
-</script>
-{% endif %}
-
-<!-- Google Tag Manager -->
+ <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -28,3 +22,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-MCFSKZRN');</script>
 <!-- End Google Tag Manager -->
+
+{# view_item #}
+{% if this.isProductPage() %}
+<script>
+  dataLayer = [{{ this.getProductPageData()|json_encode|raw }}];
+</script>
+{% endif %}
+
+{# view_cart #}
+{% if this.isCartPage() %}
+<script>
+  dataLayer = [{{ this.getCartPageData()|json_encode|raw }}];
+</script>
+{% endif %}
+
+{# begin_checkout #}
+{% if this.isCheckoutPage() %}
+<script>
+  dataLayer = [{{ this.getCheckoutPageData()|json_encode|raw }}];
+</script>
+{% endif %}
+
+{# purchase #}
+{% if this.isCheckoutSuccessPage() %}
+<script>
+  dataLayer = [{{ this.getCheckoutSuccessPageData()|json_encode|raw }}];
+</script>
+{% endif %}
+
+{# membership_view #}
+{% if this.isSubscriptionPage() %}
+<script>
+  dataLayer = [{"event": "membership_view"}];
+</script>
+{% endif %}

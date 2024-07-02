@@ -1,0 +1,39 @@
+<?php
+
+namespace Iidev\GoogleTagManager\Controller\Customer;
+
+use XCart\Extender\Mapping\Extender;
+use XLite\Core\Session;
+use \XLite\Core\Event;
+
+/**
+ * Coupon
+ *
+ * @Extender\Mixin
+ * @Extender\Depend ("CDev\Coupons")
+ */
+class Coupon extends \CDev\Coupons\Controller\Customer\Coupon
+{
+    /**
+     * @inheritdoc
+     */
+    protected function doActionAdd()
+    {
+        parent::doActionAdd();
+
+        Event::gtmCouponApplied(['event' => 'coupon_applied']);
+
+        Session::getInstance()->coupon = \XLite\Core\Request::getInstance()->code;
+
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doActionRemove()
+    {
+        parent::doActionRemove();
+
+        Session::getInstance()->coupon = "";
+    }
+}
