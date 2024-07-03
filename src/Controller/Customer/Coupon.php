@@ -21,10 +21,14 @@ class Coupon extends \CDev\Coupons\Controller\Customer\Coupon
     {
         parent::doActionAdd();
 
-        Event::gtmCouponApplied(['event' => 'coupon_applied']);
+        $code = (string) \XLite\Core\Request::getInstance()->code;
+        $coupon = \XLite\Core\Database::getRepo('CDev\Coupons\Model\Coupon')
+            ->findOneByCode($code);
 
-        Session::getInstance()->coupon = \XLite\Core\Request::getInstance()->code;
-
+        if ($coupon) {
+            Event::gtmCouponApplied(['event' => 'coupon_applied']);
+            Session::getInstance()->coupon = $code;
+        }
     }
 
     /**
