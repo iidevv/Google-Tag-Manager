@@ -60,8 +60,6 @@ class TrackingSnippet extends AView
         $profile = $this->getOrder()->getOrigProfile();
 
         if ($profile && Session::getInstance()->checkout_signup) {
-            unset(Session::getInstance()->checkout_signup);
-
             $tracking = new FrontendTracking();
             return $tracking->doCheckoutRegister($profile);
         }
