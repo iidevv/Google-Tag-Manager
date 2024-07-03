@@ -2,8 +2,9 @@
 
 namespace Iidev\GoogleTagManager\Controller\Customer;
 
-use Iidev\GoogleTagManager\Core\API;
 use XCart\Extender\Mapping\Extender;
+use Iidev\GoogleTagManager\Core\FrontendTracking;
+use XLite\Core\Session;
 
 /**
  * Checkout
@@ -15,9 +16,6 @@ class Checkout extends \XLite\Controller\Customer\Checkout
     {
         parent::saveAnonymousProfile();
 
-        // $profile = $this->getCart()->getOrigProfile();
-
-        // $api = new API();
-        // $api->createAndSubscribeProfile($profile->getLogin(), ["\$source" => 'buyer']);
+        Session::getInstance()->checkout_signup = true;
     }
 }

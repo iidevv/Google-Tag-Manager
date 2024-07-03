@@ -45,7 +45,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 {% endif %}
 
 {# purchase #}
-{% if this.isCheckoutSuccessPage() %}
+{% if this.isCheckoutSuccessPage() and this.getCheckoutSignupData()%}
+<script>
+  dataLayer = [{{ this.getCheckoutSignupData()|json_encode|raw }}, {{ this.getCheckoutSuccessPageData()|json_encode|raw }}];
+</script>
+{% elseif this.isCheckoutSuccessPage() %}
 <script>
   dataLayer = [{{ this.getCheckoutSuccessPageData()|json_encode|raw }}];
 </script>

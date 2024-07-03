@@ -10,6 +10,28 @@ class FrontendTracking
 {
     use InjectLoggerTrait;
 
+    public function doCheckoutRegister(\XLite\Model\Profile $profile)
+    {
+        $event = "checkout_signup";
+        $main = Main::getInstance();
+
+        return $main->getProfileData($profile, $event);
+    }
+
+    public function doRegister(\XLite\Model\Profile $profile)
+    {
+        $event = "signup";
+        $main = Main::getInstance();
+
+        Event::gtmProfile($main->getProfileData($profile, $event));
+    }
+
+    public function doLogin(\XLite\Model\Profile $profile)
+    {
+        $main = Main::getInstance();
+        Event::gtmProfile($main->getProfileData($profile, "login"));
+    }
+
     public function doViewCart(\XLite\Model\Cart $cart)
     {
         $main = Main::getInstance();

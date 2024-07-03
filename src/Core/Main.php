@@ -18,6 +18,18 @@ class Main extends \XLite\Base\Singleton
 
         return static::$instance;
     }
+
+    public function getProfileData(\XLite\Model\Profile $profile, $event)
+    {
+
+        return [
+            "event" => $event,
+            "user_id" => $profile->getProfileId(),
+            "membership" => $profile->getMembershipId() ? "pro member" : "non-member",
+            "total_orders" => $profile->getOrdersCount()
+        ];
+    }
+
     public function getAddedToCartData($item)
     {
         $product = $item->getProduct();

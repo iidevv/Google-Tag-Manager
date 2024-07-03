@@ -5,8 +5,8 @@ namespace Iidev\GoogleTagManager\View\Header;
 use XLite\View\AView;
 use XLite\Core\Config;
 use XCart\Extender\Mapping\ListChild;
-use \XLite\Core\Auth;
 use Iidev\GoogleTagManager\Core\FrontendTracking;
+use XLite\Core\Session;
 
 /**
  * @ListChild (list="head", zone="customer")
@@ -26,13 +26,6 @@ class TrackingSnippet extends AView
     public function getGoogleTagManagerId()
     {
         return Config::getInstance()->Iidev->GoogleTagManager->container_id;
-    }
-
-    public function getLogin()
-    {
-        $profile = Auth::getInstance()->getProfile();
-
-        return $profile ? $profile->getLogin() : null;
     }
 
     public function isCartPage()
@@ -59,6 +52,19 @@ class TrackingSnippet extends AView
             return true;
         }
 
+        return false;
+    }
+
+    public function getCheckoutSignupData()
+    {
+        $profile = $this->getOrder()->getOrigProfile();
+
+        if ($profile && Session::getInstance()->checkout_signup) {
+            unset(Session::getInstance()->checkout_signup);
+
+            $tracking = new FrontendTracking();
+            return $tracking->doCheckoutRegister($profile);
+        }
         return false;
     }
 

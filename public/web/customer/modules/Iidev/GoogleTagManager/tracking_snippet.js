@@ -3,7 +3,6 @@
 function processEvent(data) {
   if (!Array.isArray(window.dataLayer)) return;
 
-  console.log(data);
   dataLayer.push(data);
 }
 
@@ -34,6 +33,10 @@ xcart.bind("gtmFreeGift", (_, data) => {
 });
 
 xcart.bind("gtmCouponApplied", (_, data) => {
+  processEvent(data);
+});
+
+xcart.bind("gtmProfile", (_, data) => {
   processEvent(data);
 });
 
