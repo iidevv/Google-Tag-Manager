@@ -61,3 +61,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   dataLayer = [{"event": "membership_view"}];
 </script>
 {% endif %}
+
+{# logout #}
+{% if this.isLogoff() %}
+<script>
+  dataLayer = [{{ this.getLogoffData()|json_encode|raw }}];
+</script>
+{% endif %}
+

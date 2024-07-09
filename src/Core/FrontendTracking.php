@@ -32,6 +32,12 @@ class FrontendTracking
         Event::gtmProfile($main->getProfileData($profile, "login"));
     }
 
+    public function doLogout(\XLite\Model\Profile $profile)
+    {
+        $main = Main::getInstance();
+        return $main->getProfileData($profile, "logout");
+    }
+
     public function doViewCart(\XLite\Model\Cart $cart)
     {
         $main = Main::getInstance();

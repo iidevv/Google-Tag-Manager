@@ -84,6 +84,20 @@ class TrackingSnippet extends AView
         return false;
     }
 
+    public function isLogoff()
+    {
+        return Session::getInstance()->profile_data ? true : false;
+    }
+
+    public function getLogoffData()
+    {
+        $data = Session::getInstance()->profile_data;
+
+        unset(Session::getInstance()->profile_data);
+
+        return $data;
+    }
+
     protected function getCheckoutSuccessPageData()
     {
         $tracking = new FrontendTracking();
