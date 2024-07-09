@@ -3,7 +3,7 @@ version: 5.5.0.4
 type: common
 authorName: "Ilya I"
 moduleName: 'Google Tag Manager'
-description: 'Analytics, remarketing and conversions tracking'
+description: 'Analytics, remarketing and conversions tracking. GA4 Measurement Protocol.'
 minorRequiredCoreVersion: 0
 dependsOn:
   - CDev-Coupons

@@ -8,3 +8,27 @@ XLite\Model\Config:
     translations:
       - code: en
         option_name: 'Container ID'
+  - name: mp_enable
+    category: Iidev\GoogleTagManager
+    type: XLite\View\FormField\Input\Checkbox\OnOffWithoutOffLabel
+    orderby: 150
+    value: ''
+    translations:
+      - code: en
+        option_name: 'Measurement Protocol enable'
+  - name: mp_test_mode
+    category: Iidev\GoogleTagManager
+    type: XLite\View\FormField\Input\Checkbox\OnOffWithoutOffLabel
+    orderby: 200
+    value: ''
+    translations:
+      - code: en
+        option_name: 'Measurement Protocol mode'
+  - name: mp_secret_key
+    category: Iidev\GoogleTagManager
+    type: XLite\View\FormField\Input\Text
+    orderby: 250
+    value: ''
+    translations:
+      - code: en
+        option_name: 'Measurement Protocol key'
