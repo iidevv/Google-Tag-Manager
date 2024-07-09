@@ -5,7 +5,9 @@ authorName: "Ilya I"
 moduleName: 'Google Tag Manager'
 description: 'Analytics, remarketing and conversions tracking'
 minorRequiredCoreVersion: 0
-dependsOn: {  }
+dependsOn:
+  - CDev-Coupons
+  - QSL-ShopByBrand
 incompatibleWith: {  }
 showSettingsForm: true
 canDisable: true
