@@ -36,25 +36,27 @@ class Main extends \XLite\Base\Singleton
 
         $data = [
             'event' => 'add_to_cart',
-            "currency" => "USD",
-            "value" => $item->getPrice() * $item->getAmount(),
-            "items" => [
-                [
-                    "item_id" => $item->getSku(),
-                    "item_name" => $item->getName(),
-                    "item_brand" => $product->getBrandName(),
-                    "item_variant" => $this->getProductVariantName($item),
-                    "price" => (int) $item->getPrice(),
-                    "quantity" => $item->getAmount()
+            'ecommerce' => [
+                "value" => $item->getPrice() * $item->getAmount(),
+                "currency" => $this->getCurrencyCode(),
+                "items" => [
+                    [
+                        "item_id" => $item->getSku(),
+                        "item_name" => $item->getName(),
+                        "item_brand" => $product->getBrandName(),
+                        "item_variant" => $this->getProductVariantName($item),
+                        "price" => (int) $item->getPrice(),
+                        "quantity" => $item->getAmount()
+                    ]
                 ]
             ]
         ];
 
         if ($product->getNetMarketPrice()) {
-            $data["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
+            $data["ecommerce"]["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
         }
 
-        $data["items"][0] = array_merge($data["items"][0], $this->getProductCategories($product));
+        $data["ecommerce"]["items"][0] = array_merge($data["ecommerce"]["items"][0], $this->getProductCategories($product));
 
         return $data;
     }
@@ -63,9 +65,11 @@ class Main extends \XLite\Base\Singleton
     {
         $data = [
             'event' => 'remove_from_cart',
-            "currency" => "USD",
-            "value" => $this->getItemsTotal($items),
-            "items" => $this->getItems($items)
+            'ecommerce' => [
+                "value" => $this->getItemsTotal($items),
+                "currency" => $this->getCurrencyCode(),
+                "items" => $this->getItems($items)
+            ]
         ];
 
         return $data;
@@ -74,24 +78,26 @@ class Main extends \XLite\Base\Singleton
     {
         $data = [
             'event' => 'add_to_wishlist',
-            "currency" => "USD",
-            "value" => (int) $product->getPrice(),
-            "items" => [
-                [
-                    "item_id" => $product->getVariant() ? $product->getVariant()->getSku() : $product->getSku(),
-                    "item_name" => $product->getName(),
-                    "item_brand" => $product->getBrandName(),
-                    "price" => (int) $product->getPrice(),
-                    "quantity" => 1
+            'ecommerce' => [
+                "value" => (int) $product->getPrice(),
+                "currency" => $this->getCurrencyCode(),
+                "items" => [
+                    [
+                        "item_id" => $product->getVariant() ? $product->getVariant()->getSku() : $product->getSku(),
+                        "item_name" => $product->getName(),
+                        "item_brand" => $product->getBrandName(),
+                        "price" => (int) $product->getPrice(),
+                        "quantity" => 1
+                    ]
                 ]
             ]
         ];
 
         if ($product->getNetMarketPrice()) {
-            $data["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
+            $data["ecommerce"]["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
         }
 
-        $data["items"][0] = array_merge($data["items"][0], $this->getProductCategories($product));
+        $data["ecommerce"]["items"][0] = array_merge($data["ecommerce"]["items"][0], $this->getProductCategories($product));
 
         return $data;
     }
@@ -103,9 +109,13 @@ class Main extends \XLite\Base\Singleton
 
         $data = [
             'event' => 'begin_checkout',
-            "currency" => "USD",
-            "value" => $cart->getTotal(),
-            "items" => $this->getItems($cart->getItems())
+            'ecommerce' => [
+                "value" => $cart->getTotal(),
+                "currency" => $this->getCurrencyCode(),
+                "items" => $this->getItems($cart->getItems())
+            ]
+
+
         ];
 
         if (Session::getInstance()->coupon) {
@@ -120,15 +130,17 @@ class Main extends \XLite\Base\Singleton
         $data = [
             'event' => 'purchase',
             'transaction_id' => (string) $order->getOrderId(),
-            "currency" => "USD",
-            'shipping' => $order->getSurchargeSumByType(\XLite\Model\Base\Surcharge::TYPE_SHIPPING),
-            'tax' => $order->getSurchargeSumByType(\XLite\Model\Base\Surcharge::TYPE_TAX),
+            'shipping' => round($order->getSurchargeSumByType(\XLite\Model\Base\Surcharge::TYPE_SHIPPING), 2),
+            'tax' => round($order->getSurchargeSumByType(\XLite\Model\Base\Surcharge::TYPE_TAX), 2),
             "value" => $order->getTotal(),
+            "currency" => $this->getCurrencyCode(),
             "items" => $this->getItems($order->getItems())
         ];
 
         if (Session::getInstance()->coupon) {
             $data["coupon"] = Session::getInstance()->coupon;
+
+            unset(Session::getInstance()->coupon);
         }
 
         return $data;
@@ -138,25 +150,27 @@ class Main extends \XLite\Base\Singleton
     {
         $data = [
             'event' => 'view_item',
-            "currency" => "USD",
-            "value" => $product->getPrice(),
-            "items" => [
-                [
-                    "item_id" => $product->getVariant() ? $product->getVariant()->getSku() : $product->getSku(),
-                    "item_name" => $product->getName(),
-                    "item_brand" => $product->getBrandName(),
-                    "item_url" => $product->getURL(),
-                    "item_image_url" => $product->getImageURL(),
-                    "price" => $product->getPrice(),
+            'ecommerce' => [
+                "value" => $product->getPrice(),
+                "currency" => $this->getCurrencyCode(),
+                "items" => [
+                    [
+                        "item_id" => $product->getVariant() ? $product->getVariant()->getSku() : $product->getSku(),
+                        "item_name" => $product->getName(),
+                        "item_brand" => $product->getBrandName(),
+                        "item_url" => $product->getURL(),
+                        "item_image_url" => $product->getImageURL(),
+                        "price" => $product->getPrice(),
+                    ]
                 ]
             ]
         ];
 
         if ($product->getNetMarketPrice()) {
-            $data["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
+            $data["ecommerce"]["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
         }
 
-        $data["items"][0] = array_merge($data["items"][0], $this->getProductCategories($product));
+        $data["ecommerce"]["items"][0] = array_merge($data["ecommerce"]["items"][0], $this->getProductCategories($product));
 
         return $data;
     }
@@ -165,10 +179,12 @@ class Main extends \XLite\Base\Singleton
     {
         $data = [
             'event' => 'view_cart',
-            "currency" => "USD",
-            "value" => $cart->getTotal()
+            'ecommerce' => [
+                "value" => $cart->getTotal(),
+                "currency" => $this->getCurrencyCode(),
+                "items" => $this->getItems($cart->getItems())
+            ]
         ];
-        $data['items'] = $this->getItems($cart->getItems());
 
         return $data;
     }
@@ -230,6 +246,11 @@ class Main extends \XLite\Base\Singleton
             }
         }
         return $items;
+    }
+
+    protected function getCurrencyCode()
+    {
+        return \XLite::getInstance()->getCurrency()->getCode();
     }
 
     protected function __construct()
