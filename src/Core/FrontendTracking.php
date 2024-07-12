@@ -58,7 +58,7 @@ class FrontendTracking
     public function doPurchase($order)
     {
         $main = Main::getInstance();
-        return $main->getPurchaseData($order);
+        return $main->getPurchaseData($order, 'purchase');
     }
 
     public function doAddToCart(\XLite\Model\OrderItem $item)

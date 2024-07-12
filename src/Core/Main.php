@@ -4,6 +4,7 @@ namespace Iidev\GoogleTagManager\Core;
 
 use XLite\InjectLoggerTrait;
 use XLite\Core\Session;
+use \XLite\Model\Base\Surcharge;
 
 class Main extends \XLite\Base\Singleton
 {
@@ -125,13 +126,13 @@ class Main extends \XLite\Base\Singleton
         return $data;
     }
 
-    public function getPurchaseData($order)
+    public function getPurchaseData($order, $event)
     {
         $data = [
-            'event' => 'purchase',
+            'event' => $event,
             'transaction_id' => (string) $order->getOrderId(),
-            'shipping' => round($order->getSurchargeSumByType(\XLite\Model\Base\Surcharge::TYPE_SHIPPING), 2),
-            'tax' => round($order->getSurchargeSumByType(\XLite\Model\Base\Surcharge::TYPE_TAX), 2),
+            'shipping' => round($order->getSurchargeSumByType(Surcharge::TYPE_SHIPPING), 2),
+            'tax' => round($order->getSurchargeSumByType(Surcharge::TYPE_TAX), 2),
             "value" => $order->getTotal(),
             "currency" => $this->getCurrencyCode(),
             "items" => $this->getItems($order->getItems())
@@ -180,7 +181,7 @@ class Main extends \XLite\Base\Singleton
         $data = [
             'event' => 'view_cart',
             'ecommerce' => [
-                "value" => $cart->getTotal(),
+                "value" => $cart->getSubtotal(),
                 "currency" => $this->getCurrencyCode(),
                 "items" => $this->getItems($cart->getItems())
             ]
@@ -220,7 +221,7 @@ class Main extends \XLite\Base\Singleton
         }, 0);
     }
 
-    protected function getItems($cartItems)
+    public function getItems($cartItems)
     {
         $items = [];
 
@@ -248,7 +249,7 @@ class Main extends \XLite\Base\Singleton
         return $items;
     }
 
-    protected function getCurrencyCode()
+    public function getCurrencyCode()
     {
         return \XLite::getInstance()->getCurrency()->getCode();
     }

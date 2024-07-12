@@ -98,6 +98,16 @@ class TrackingSnippet extends AView
         return $data;
     }
 
+    public function isMPEnabled()
+    {
+        return (boolean) Config::getInstance()->Iidev->GoogleTagManager->mp_enabled;
+    }
+
+    public function isTestMode()
+    {
+        return (bool) Config::getInstance()->Iidev->GoogleTagManager->mp_test_mode;
+    }
+
     protected function getCheckoutSuccessPageData()
     {
         $tracking = new FrontendTracking();
@@ -108,6 +118,11 @@ class TrackingSnippet extends AView
     {
         $tracking = new FrontendTracking();
         return $tracking->doBeginCheckout();
+    }
+
+    protected function getGAPublicKey()
+    {
+        return Config::getInstance()->Iidev->GoogleTagManager->ga_public_key;
     }
 
     protected function getCartPageData()

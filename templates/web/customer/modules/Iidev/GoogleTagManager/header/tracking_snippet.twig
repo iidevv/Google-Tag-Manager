@@ -26,46 +26,69 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 {# view_item #}
 {% if this.isProductPage() %}
 <script>
-  dataLayer = [{{ this.getProductPageData()|json_encode|raw }}];
+  window.gtmLayer = [{{ this.getProductPageData()|json_encode|raw }}];
 </script>
 {% endif %}
 
 {# view_cart #}
 {% if this.isCartPage() %}
 <script>
-  dataLayer = [{{ this.getCartPageData()|json_encode|raw }}];
+  window.gtmLayer = [{{ this.getCartPageData()|json_encode|raw }}];
 </script>
 {% endif %}
 
 {# begin_checkout #}
 {% if this.isCheckoutPage() %}
 <script>
-  dataLayer = [{{ this.getCheckoutPageData()|json_encode|raw }}];
+  window.gtmLayer = [{{ this.getCheckoutPageData()|json_encode|raw }}];
+</script>
+{% endif %}
+
+{# begin_checkout #}
+{% if this.isCheckoutPage() and this.isMPEnabled() %}
+<script>
+  window.gtag = function(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', "{{ this.getGAPublicKey() }}");
+
+  gtag('get', "{{ this.getGAPublicKey() }}", 'client_id', function(clientId) {
+    createProcessInput("client_id", clientId)
+  });
+  gtag('get', "{{ this.getGAPublicKey() }}", 'session_id', function(sessionId) {
+    createProcessInput("session_id", sessionId)
+  });
+  function createProcessInput(name, data) {
+    let hiddenInput = document.createElement("input");
+    hiddenInput.setAttribute("type", "hidden");
+    hiddenInput.setAttribute("name", name);
+    hiddenInput.setAttribute("value", data);
+    document.querySelector("form.place .form-params").appendChild(hiddenInput);
+  }
 </script>
 {% endif %}
 
 {# purchase #}
 {% if this.isCheckoutSuccessPage() and this.getCheckoutSignupData()%}
 <script>
-  dataLayer = [{{ this.getCheckoutSignupData()|json_encode|raw }}, {{ this.getCheckoutSuccessPageData()|json_encode|raw }}];
+  window.gtmLayer = [{{ this.getCheckoutSignupData()|json_encode|raw }}, {{ this.getCheckoutSuccessPageData()|json_encode|raw }}];
 </script>
 {% elseif this.isCheckoutSuccessPage() %}
 <script>
-  dataLayer = [{{ this.getCheckoutSuccessPageData()|json_encode|raw }}];
+  window.gtmLayer = [{{ this.getCheckoutSuccessPageData()|json_encode|raw }}];
 </script>
 {% endif %}
 
 {# membership_view #}
 {% if this.isSubscriptionPage() %}
 <script>
-  dataLayer = [{"event": "membership_view"}];
+  window.gtmLayer = [{"event": "membership_view"}];
 </script>
 {% endif %}
 
 {# logout #}
 {% if this.isLogoff() %}
 <script>
-  dataLayer = [{{ this.getLogoffData()|json_encode|raw }}];
+  window.gtmLayer = [{{ this.getLogoffData()|json_encode|raw }}];
 </script>
 {% endif %}
 

@@ -8,27 +8,37 @@ XLite\Model\Config:
     translations:
       - code: en
         option_name: 'Container ID'
-  - name: mp_enable
+  - name: ga_public_key
     category: Iidev\GoogleTagManager
-    type: XLite\View\FormField\Input\Checkbox\OnOffWithoutOffLabel
+    type: XLite\View\FormField\Input\Text
     orderby: 150
     value: ''
     translations:
       - code: en
-        option_name: 'Measurement Protocol enable'
-  - name: mp_test_mode
+        option_name: 'GA key'
+  - name: mp_secret_key
     category: Iidev\GoogleTagManager
-    type: XLite\View\FormField\Input\Checkbox\OnOffWithoutOffLabel
+    type: XLite\View\FormField\Input\Text
     orderby: 200
     value: ''
     translations:
       - code: en
-        option_name: 'Measurement Protocol mode'
-  - name: mp_secret_key
+        option_name: 'Measurement protocol key'
+  - name: mp_enabled
     category: Iidev\GoogleTagManager
-    type: XLite\View\FormField\Input\Text
+    type: XLite\View\FormField\Input\Checkbox\OnOffWithoutOffLabel
     orderby: 250
     value: ''
     translations:
       - code: en
-        option_name: 'Measurement Protocol key'
+        option_name: 'Measurement protocol enabled'
+        option_comment: "Pause GA4 | purchase on GTM"
+  - name: mp_test_mode
+    category: Iidev\GoogleTagManager
+    type: XLite\View\FormField\Input\Checkbox\OnOffWithoutOffLabel
+    orderby: 300
+    value: ''
+    translations:
+      - code: en
+        option_name: 'Measurement protocol test mode'
+        option_comment: "Unpause GA4 | purchase on GTM. Test mode adds '_test' postfix."  
