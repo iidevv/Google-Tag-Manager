@@ -82,7 +82,6 @@ class BackendTracking
                         "value" => $order->getTotal(),
                         "currency" => $main->getCurrencyCode(),
                         "session_id" => (int) $measurementProtocol->getMpSessionId(),
-                        "debug_mode" => 1
                     ]
                 ]
             ]
