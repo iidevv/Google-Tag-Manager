@@ -77,10 +77,4 @@ class FrontendTracking
         $main = Main::getInstance();
         Event::gtmRemovedFromCart($main->getRemovedFromCartData($items));
     }
-
-    public function doAddToWishlist($item)
-    {
-        $main = Main::getInstance();
-        Event::gtmAddedToWishlist($main->getAddedToWishlistData($item));
-    }
 }

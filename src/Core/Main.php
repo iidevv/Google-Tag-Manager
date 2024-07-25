@@ -75,34 +75,7 @@ class Main extends \XLite\Base\Singleton
 
         return $data;
     }
-    public function getAddedToWishlistData($product)
-    {
-        $data = [
-            'event' => 'add_to_wishlist',
-            'ecommerce' => [
-                "value" => (int) $product->getPrice(),
-                "currency" => $this->getCurrencyCode(),
-                "items" => [
-                    [
-                        "item_id" => $product->getVariant() ? $product->getVariant()->getSku() : $product->getSku(),
-                        "item_name" => $product->getName(),
-                        "item_brand" => $product->getBrandName(),
-                        "price" => (int) $product->getPrice(),
-                        "quantity" => 1
-                    ]
-                ]
-            ]
-        ];
-
-        if ($product->getNetMarketPrice()) {
-            $data["ecommerce"]["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
-        }
-
-        $data["ecommerce"]["items"][0] = array_merge($data["ecommerce"]["items"][0], $this->getProductCategories($product));
-
-        return $data;
-    }
-
+    
     public function getBeginCheckoutData()
     {
 
