@@ -8,6 +8,7 @@ minorRequiredCoreVersion: 0
 dependsOn:
   - CDev-Coupons
   - QSL-ShopByBrand
+  - QSL-MyWishlist
 incompatibleWith: {  }
 showSettingsForm: true
 canDisable: true
