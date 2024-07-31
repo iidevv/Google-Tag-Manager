@@ -42,3 +42,11 @@ XLite\Model\Config:
       - code: en
         option_name: 'Measurement protocol test mode'
         option_comment: "Unpause GA4 | purchase on GTM. Test mode adds '_test' postfix."  
+  - name: is_debug
+    category: Iidev\GoogleTagManager
+    type: XLite\View\FormField\Input\Checkbox\OnOffWithoutOffLabel
+    orderby: 400
+    value: ''
+    translations:
+      - code: en
+        option_name: 'Measurement protocol debug mode'
