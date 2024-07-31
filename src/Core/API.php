@@ -102,10 +102,6 @@ class API
     {
         $data = json_encode($data);
 
-        $this->getLogger('Measurement Protocol')->debug(__FUNCTION__ . 'Request. Initial data', [
-            $data
-        ]);
-
         $url = $this->getDebugGAUrl();
 
         $request = new \XLite\Core\HTTP\Request($url);
@@ -118,14 +114,13 @@ class API
 
         $request->body = $data;
 
-        $this->getLogger('Measurement Protocol')->debug(__FUNCTION__ . 'Request', [
-            $url,
-            $request->headers,
-            $request->body,
-        ]);
-
         $response = $request->sendRequest();
 
-        Logger::logMessage($response);
+        $logData = [
+            "Request" => $request,
+            "Response" => $response
+        ];
+
+        Logger::logMessage($logData);
     }
 }
