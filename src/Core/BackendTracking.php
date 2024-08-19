@@ -106,7 +106,6 @@ class BackendTracking
         $measurementProtocol->setDateCompleted(time());
 
         Database::getEM()->persist($measurementProtocol);
-        Database::getEM()->flush();
 
     }
 }
