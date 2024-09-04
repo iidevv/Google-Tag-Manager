@@ -50,6 +50,8 @@
     createProcessInput("session_id", sessionId)
   });
   function createProcessInput(name, data) {
+    if(!document.querySelector("form.place .form-params")) return;
+    
     let hiddenInput = document.createElement("input");
     hiddenInput.setAttribute("type", "hidden");
     hiddenInput.setAttribute("name", name);
