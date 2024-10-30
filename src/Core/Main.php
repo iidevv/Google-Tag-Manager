@@ -46,16 +46,12 @@ class Main extends \XLite\Base\Singleton
                         "item_name" => $item->getName(),
                         "item_brand" => $product->getBrandName(),
                         "item_variant" => $this->getProductVariantName($item),
-                        "price" => (int) $item->getPrice(),
+                        "price" => (int) $item->getTotal(),
                         "quantity" => $item->getAmount()
                     ]
                 ]
             ]
         ];
-
-        if ($product->getNetMarketPrice()) {
-            $data["ecommerce"]["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
-        }
 
         $data["ecommerce"]["items"][0] = array_merge($data["ecommerce"]["items"][0], $this->getProductCategories($product));
 
@@ -205,14 +201,14 @@ class Main extends \XLite\Base\Singleton
                 "item_name" => $cartItem->getName(),
                 "item_brand" => $product->getBrandName(),
                 "item_variant" => $this->getProductVariantName($cartItem),
-                "price" => (int) $product->getPrice(),
+                "price" => (int) $cartItem->getTotal(),
                 "quantity" => $cartItem->getAmount(),
             ];
 
             $items[count($items) - 1] = array_merge($items[count($items) - 1], $this->getProductCategories($product));
 
             if ($product->getNetMarketPrice()) {
-                $items[count($items) - 1]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
+                $items[count($items) - 1]["discount"] = round($product->getNetMarketPrice() - $cartItem->getTotal(), 2);
             }
 
             if (Session::getInstance()->coupon) {
