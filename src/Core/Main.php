@@ -46,7 +46,7 @@ class Main extends \XLite\Base\Singleton
                         "item_name" => $item->getName(),
                         "item_brand" => $product->getBrandName(),
                         "item_variant" => $this->getProductVariantName($item),
-                        "price" => (int) $item->getTotal(),
+                        "price" => (int) $item->getPrice(),
                         "quantity" => $item->getAmount()
                     ]
                 ]
@@ -201,14 +201,14 @@ class Main extends \XLite\Base\Singleton
                 "item_name" => $cartItem->getName(),
                 "item_brand" => $product->getBrandName(),
                 "item_variant" => $this->getProductVariantName($cartItem),
-                "price" => (int) $cartItem->getTotal(),
+                "price" => (int) $cartItem->getPrice(),
                 "quantity" => $cartItem->getAmount(),
             ];
 
             $items[count($items) - 1] = array_merge($items[count($items) - 1], $this->getProductCategories($product));
 
             if ($product->getNetMarketPrice()) {
-                $items[count($items) - 1]["discount"] = round($product->getNetMarketPrice() - $cartItem->getTotal(), 2);
+                $items[count($items) - 1]["discount"] = round($product->getNetMarketPrice() - $cartItem->getPrice(), 2);
             }
 
             if (Session::getInstance()->coupon) {
