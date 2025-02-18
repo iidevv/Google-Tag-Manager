@@ -38,7 +38,7 @@ class Main extends \XLite\Base\Singleton
         $data = [
             'event' => 'add_to_cart',
             'ecommerce' => [
-                "value" => $item->getPrice() * $item->getAmount(),
+                "value" => $item->getDisplayPrice() * $item->getAmount(),
                 "currency" => $this->getCurrencyCode(),
                 "items" => [
                     [
@@ -46,7 +46,7 @@ class Main extends \XLite\Base\Singleton
                         "item_name" => $item->getName(),
                         "item_brand" => $product->getBrandName(),
                         "item_variant" => $this->getProductVariantName($item),
-                        "price" => (int) $item->getPrice(),
+                        "price" => (int) $item->getDisplayPrice(),
                         "quantity" => $item->getAmount()
                     ]
                 ]
@@ -118,26 +118,28 @@ class Main extends \XLite\Base\Singleton
 
     public function getViewedProductData($product)
     {
+        $variant = $product->getVariantByRequest();
+
         $data = [
             'event' => 'view_item',
             'ecommerce' => [
-                "value" => $product->getPrice(),
+                "value" => $variant && $variant->getDisplayPrice() ? $variant->getDisplayPrice() : $product->getDisplayPrice(),
                 "currency" => $this->getCurrencyCode(),
                 "items" => [
                     [
-                        "item_id" => $product->getVariant() ? $product->getVariant()->getSku() : $product->getSku(),
+                        "item_id" => $variant ? $variant->getSku() : $product->getSku(),
                         "item_name" => $product->getName(),
                         "item_brand" => $product->getBrandName(),
                         "item_url" => $product->getURL(),
                         "item_image_url" => $product->getImageURL(),
-                        "price" => $product->getPrice(),
+                        "price" => $variant && $variant->getDisplayPrice() ? $variant->getDisplayPrice() : $product->getDisplayPrice(),
                     ]
                 ]
             ]
         ];
 
         if ($product->getNetMarketPrice()) {
-            $data["ecommerce"]["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
+            $data["ecommerce"]["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getDisplayPrice(), 2);
         }
 
         $data["ecommerce"]["items"][0] = array_merge($data["ecommerce"]["items"][0], $this->getProductCategories($product));
@@ -186,7 +188,7 @@ class Main extends \XLite\Base\Singleton
     protected function getItemsTotal($items)
     {
         return array_reduce($items, function ($acc, $item) {
-            return $acc + ($item->getPrice() * $item->getAmount());
+            return $acc + ($item->getDisplayPrice() * $item->getAmount());
         }, 0);
     }
 
@@ -201,14 +203,14 @@ class Main extends \XLite\Base\Singleton
                 "item_name" => $cartItem->getName(),
                 "item_brand" => $product->getBrandName(),
                 "item_variant" => $this->getProductVariantName($cartItem),
-                "price" => (int) $cartItem->getPrice(),
+                "price" => (int) $cartItem->getDisplayPrice(),
                 "quantity" => $cartItem->getAmount(),
             ];
 
             $items[count($items) - 1] = array_merge($items[count($items) - 1], $this->getProductCategories($product));
 
             if ($product->getNetMarketPrice()) {
-                $items[count($items) - 1]["discount"] = round($product->getNetMarketPrice() - $cartItem->getPrice(), 2);
+                $items[count($items) - 1]["discount"] = round($product->getNetMarketPrice() - $cartItem->getDisplayPrice(), 2);
             }
 
             if (Session::getInstance()->coupon) {
@@ -223,14 +225,14 @@ class Main extends \XLite\Base\Singleton
         $data = [
             'event' => 'add_to_wishlist',
             'ecommerce' => [
-                "value" => (int) $product->getPrice(),
+                "value" => (int) $product->getDisplayPrice(),
                 "currency" => $this->getCurrencyCode(),
                 "items" => [
                     [
                         "item_id" => $product->getVariant() ? $product->getVariant()->getSku() : $product->getSku(),
                         "item_name" => $product->getName(),
                         "item_brand" => $product->getBrandName(),
-                        "price" => (int) $product->getPrice(),
+                        "price" => (int) $product->getDisplayPrice(),
                         "quantity" => 1
                     ]
                 ]
@@ -238,7 +240,7 @@ class Main extends \XLite\Base\Singleton
         ];
 
         if ($product->getNetMarketPrice()) {
-            $data["ecommerce"]["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getPrice(), 2);
+            $data["ecommerce"]["items"][0]["discount"] = round($product->getNetMarketPrice() - $product->getDisplayPrice(), 2);
         }
 
         $data["ecommerce"]["items"][0] = array_merge($data["ecommerce"]["items"][0], $this->getProductCategories($product));
