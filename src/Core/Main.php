@@ -38,7 +38,7 @@ class Main extends \XLite\Base\Singleton
         $data = [
             'event' => 'add_to_cart',
             'ecommerce' => [
-                "value" => $item->getDisplayPrice() * $item->getAmount(),
+                "value" => $item->getPrice() * $item->getAmount(),
                 "currency" => $this->getCurrencyCode(),
                 "items" => [
                     [
@@ -46,7 +46,7 @@ class Main extends \XLite\Base\Singleton
                         "item_name" => $item->getName(),
                         "item_brand" => $product->getBrandName(),
                         "item_variant" => $this->getProductVariantName($item),
-                        "price" => (int) $item->getDisplayPrice(),
+                        "price" => (int) $item->getPrice(),
                         "quantity" => $item->getAmount()
                     ]
                 ]
@@ -119,6 +119,10 @@ class Main extends \XLite\Base\Singleton
     public function getViewedProductData($product)
     {
         $variant = $product->getVariantByRequest();
+
+        if(!$variant) {
+            $variant = $product->getVariants()?->first();
+        }
 
         $data = [
             'event' => 'view_item',
